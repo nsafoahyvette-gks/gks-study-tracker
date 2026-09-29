@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7c5cff">
+  <title>GKS Study Tracker | Yvette</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">Y</div>
+        <div>
+          <strong>YVETTE.</strong>
+          <span>GKS STUDY TRACKER</span>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-item active" data-section="dashboard">🏠 Dashboard</button>
+        <button class="nav-item" data-section="tasks">✓ Tasks</button>
+        <button class="nav-item" data-section="progress">📊 Progress</button>
+        <button class="nav-item" data-section="goals">🎯 Goals</button>
+        <button class="nav-item" data-section="notes">📝 Notes</button>
+        <button class="nav-item" data-section="completed">🏆 Completed</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button id="themeToggle" class="utility-btn">🌙 Dark mode</button>
+        <button id="exportBtn" class="utility-btn">⬇️ Export data</button>
+        <button id="importBtn" class="utility-btn">⬆️ Import data</button>
+        <input type="file" id="importFile" accept=".json" hidden>
+        <button id="resetBtn" class="utility-btn danger">↻ Reset tracker</button>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PERSONAL GKS PREPARATION</p>
+          <h1 id="pageTitle">Study Dashboard</h1>
+          <p id="todayText"></p>
+        </div>
+
+        <div class="top-actions">
+          <div class="streak-pill">🔥 <span id="topStreak">0</span> day streak</div>
+          <button id="mobileTheme" class="icon-btn">🌙</button>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="page-section active">
+
+        <div class="hero-card">
+          <div>
+            <span class="hero-label">YOUR JOURNEY</span>
+            <h2>Small progress.<br><span>Big destination.</span></h2>
+            <p>
+              Build your academic, Korean, programming and creative skills
+              one task at a time.
+            </p>
+            <button class="primary-btn" data-go="tasks">+ Add a study task</button>
+          </div>
+
+          <div class="hero-orbit">
+            <div class="orbit-inner">
+              <strong id="heroProgress">0%</strong>
+              <span>overall</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-icon">📚</span>
+            <div>
+              <span>Overall progress</span>
+              <strong id="statProgress">0%</strong>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">✅</span>
+            <div>
+              <span>Tasks completed</span>
+              <strong id="statCompleted">0 / 0</strong>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">🔥</span>
+            <div>
+              <span>Current streak</span>
+              <strong id="statStreak">0 days</strong>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">📖</span>
+            <div>
+              <span>Study areas</span>
+              <strong id="statAreas">0</strong>
+            </div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-kicker">TODAY</span>
+                <h3>Today's focus</h3>
+              </div>
+              <button class="text-btn" data-go="tasks">View all →</button>
+            </div>
+
+            <div id="todayTasks" class="mini-task-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-kicker">AREAS</span>
+                <h3>Skill overview</h3>
+              </div>
+            </div>
+
+            <div id="dashboardProgress" class="progress-list"></div>
+          </div>
+
+        </div>
+
+        <div class="quote-card">
+          <span>✦</span>
+          <p id="dailyQuote">Consistency beats perfection.</p>
+        </div>
+
+      </section>
+
+      <!-- TASKS -->
+      <section id="tasks" class="page-section">
+
+        <div class="section-intro">
+          <span class="section-kicker">YOUR WORK</span>
+          <h2>Study tasks</h2>
+          <p>Create, organize and complete the things you need to do.</p>
+        </div>
+
+        <div class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="section-kicker">NEW TASK</span>
+              <h3>Add something to your list</h3>
+            </div>
+          </div>
+
+          <form id="taskForm" class="form-grid">
+
+            <div class="field field-wide">
+              <label for="taskTitle">Task name</label>
+              <input id="taskTitle" type="text" placeholder="e.g. Practice quadratic equations" required>
+            </div>
+
+            <div class="field">
+              <label for="taskCategory">Study area</label>
+              <select id="taskCategory" required></select>
+            </div>
+
+            <div class="field">
+              <label for="taskType">Type</label>
+              <select id="taskType">
+                <option>Academic</option>
+                <option>Korean</option>
+                <option>Programming</option>
+                <option>Architecture</option>
+                <option>Portfolio</option>
+                <option>Creative</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="taskDate">Due date</label>
+              <input id="taskDate" type="date">
+            </div>
+
+            <div class="field">
+              <label for="taskMinutes">Estimated minutes</label>
+              <input id="taskMinutes" type="number" min="5" step="5" value="30">
+            </div>
+
+            <div class="field submit-field">
+              <button class="primary-btn full" type="submit">Add task +</button>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="task-controls">
+          <div class="search-box">
+            🔎
+            <input id="searchTasks" type="search" placeholder="Search tasks...">
+          </div>
+
+          <select id="filterCategory">
+            <option value="all">All areas</option>
+          </select>
+
+          <select id="filterStatus">
+            <option value="all">All tasks</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+
+        <div id="taskList" class="task-list"></div>
+
+      </section>
+
+      <!-- PROGRESS -->
+      <section id="progress" class="page-section">
+
+        <div class="section-intro">
+          <span class="section-kicker">TRACK YOUR GROWTH</span>
+          <h2>Progress</h2>
+          <p>See how your different skills are developing.</p>
+        </div>
+
+        <div class="big-progress-card">
+          <div class="big-progress-number" id="bigProgressNumber">0%</div>
+          <div class="big-progress-info">
+            <h3>Overall completion</h3>
+            <p id="bigProgressText">0 completed tasks out of 0.</p>
+            <div class="large-bar">
+              <div id="bigProgressBar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="fullProgressList" class="category-grid"></div>
+
+      </section>
+
+      <!-- GOALS -->
+      <section id="goals" class="page-section">
+
+        <div class="section-intro">
+          <span class="section-kicker">THINK BIG</span>
+          <h2>Goals</h2>
+          <p>Keep track of the things you're working toward.</p>
+        </div>
+
+        <div class="panel form-panel">
+          <form id="goalForm" class="goal-form">
+
+            <div class="field">
+              <label for="goalTitle">Goal</label>
+              <input id="goalTitle" type="text" placeholder="e.g. Finish my portfolio" required>
+            </div>
+
+            <div class="field">
+              <label for="goalCategory">Category</label>
+              <select id="goalCategory"></select>
+            </div>
+
+            <div class="field">
+              <label for="goalTarget">Target / milestone</label>
+              <input id="goalTarget" type="text" placeholder="e.g. 10 projects">
+            </div>
+
+            <button class="primary-btn" type="submit">Add goal +</button>
+
+          </form>
+        </div>
+
+        <div id="goalList" class="goal-list"></div>
+
+      </section>
+
+      <!-- NOTES -->
+      <section id="notes" class="page-section">
+
+        <div class="section-intro">
+          <span class="section-kicker">THINK • REFLECT • LEARN</span>
+          <h2>Study notes</h2>
+          <p>Keep short ideas, reminders and things you learned.</p>
+        </div>
+
+        <div class="panel form-panel">
+          <form id="noteForm">
+
+            <div class="field">
+              <label for="noteTitle">Note title</label>
+              <input id="noteTitle" type="text" placeholder="e.g. What I learned about data structures" required>
+            </div>
+
+            <div class="field">
+              <label for="noteText">Your note</label>
+              <textarea id="noteText" rows="5" placeholder="Write something useful..." required></textarea>
+            </div>
+
+            <button class="primary-btn" type="submit">Save note +</button>
+
+          </form>
+        </div>
+
+        <div id="noteList" class="note-grid"></div>
+
+      </section>
+
+      <!-- COMPLETED -->
+      <section id="completed" class="page-section">
+
+        <div class="section-intro">
+          <span class="section-kicker">LOOK HOW FAR YOU'VE COME</span>
+          <h2>Completed work</h2>
+          <p>Everything you've finished is collected here.</p>
+        </div>
+
+        <div class="completed-summary">
+          <div>
+            <strong id="completedNumber">0</strong>
+            <span>completed tasks</span>
+          </div>
+          <div>
+            <strong id="studyDays">0</strong>
+            <span>study days</span>
+          </div>
+          <div>
+            <strong id="completedMinutes">0</strong>
+            <span>minutes logged</span>
+          </div>
+        </div>
+
+        <div id="completedList" class="completed-list"></div>
+
+      </section>
+
+      <footer>
+        <strong>YVETTE.</strong>
+        <span>Personal GKS Preparation Tracker • Built with HTML, CSS & JavaScript</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
